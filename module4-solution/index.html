@@ -1,1 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="restaurantApp">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Restaurant App</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background: #ff9800;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .navbar a {
+            margin: 0 15px;
+            font-size: 1.2em;
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .navbar a:hover {
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            position: relative;
+        }
+
+        h1, h2 {
+            color: #ff9800;
+            text-align: center;
+        }
+
+        p {
+            color: #555;
+            text-align: center;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .category-item {
+            background: #ff9800;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .category-item:hover {
+            background: #333;
+        }
+
+        .item-card {
+            background: #333;
+            color: #fff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .item-card:hover {
+            background: #444;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.25/angular-ui-router.min.js"></script>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <a ui-sref="home">Home</a>
+        <a ui-sref="categories">Categories</a>
+    </div>
+
+    <div class="container" ui-view></div>
+
+    <script>
+        angular.module('restaurantApp', ['ui.router'])
+
+            .config(function ($stateProvider, $urlRouterProvider) {
+                // ... (unchanged)
+            })
+
+            .controller('HomeController', function () {
+                // Home Controller Logic
+            })
+
+            .controller('CategoriesController', function (categoriesList) {
+                this.categoriesList = categoriesList;
+            })
+
+            .controller('ItemsController', function (itemList, category) {
+                this.itemList = itemList;
+                this.category = category;
+            });
+
+    </script>
+
+</body>
+
+</html>
+
+
 
