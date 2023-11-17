@@ -1,1 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="NarrowItDownApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Something Else</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="angular.min.js"></script>
+    <script src="app.js"></script>
+</head>
+<body ng-controller="NarrowItDownController as narrow">
 
+    <div class="title">
+        <h1>Narrow Restaurant Items</h1>
+    </div>
+
+    <div>
+
+        <br>
+        <input ng-model="searchValue" placeholder="search in menu" class="item">
+        <button class="btn btn-info item" ng-click="narrow.getItems(searchValue);">Narrow It Down For Me</button>
+
+        <found-items found="narrow.found" titles="narrow.titles" remove="narrow.removeMenuItem(index)"></found-items>
+
+        <div class="error" ng-if="narrow.searched">
+            <h1>Nothing is found</h1>
+        </div>
+    </div>
+
+    <table class="table table-hover">
+        <th ng-if="founds.isDataComing()" ng-repeat="title in founds.titles">{{title}}</th>
+        <tr ng-repeat="item in founds.found">
+            <td>{{item.name}}</td>
+            <td>{{item.description}}</td>
+            <td>{{item.short_name}}</td>
+            <td><button ng-click="founds.remove({index : $index});">Don't want this one!</button></td>
+        </tr>
+    </table>
+
+    <script type="text/ng-template" id="foundItems.html">
+        <!-- your template content here -->
+    </script>
+</body>
+</html>
+
+<style>
+    .error {
+        color: red;
+    }
+
+    .title, .item {
+        position: relative;
+        left: 100px;
+    }
+</style>
+
+<script>
+    angular.module('NarrowItDownApp', [])
+        .controller('NarrowItDownController', NarrowItDownController)
+        .service('MenuSearchService', MenuSearchService)
+        .directive('foundItems', FoundItemsDirective);
+
+    function FoundItemsDirective() {
+        var ddo = {
+            scope: {
+                titles: "<",
+                found: "<",
+                remove: "&"
+            },
+            templateUrl: "foundItems.html",
+            controller: FoundItemsDirectiveController,
+            controllerAs: 'founds',
+            bindToController: true
+        };
+
+        return ddo;
+    }
+
+    function FoundItemsDirectiveController() {
+        var founds = this;
+
+        founds.isDataComing = function () {
+            return founds.found.length > 0;
+        }
+    }
+
+    NarrowItDownController.$inject = ['MenuSearchService'];
+
+    function NarrowItDownController(MenuSearchService) {
+        var narrow = this;
+
+        narrow.found = [];
+
+        narrow.titles = {
+            name: "NAME",
+            description: "DESCRIPTION",
+            short_name: "SHORT NAME"
+        };
+
+        narrow.removeMenuItem = function (index) {
+            MenuSearchService.removeItem(index);
+        }
+
+        narrow.getItems = function (searchValue) {
+            var promise = MenuSearchService.getMatchedMenuItems(searchValue);
+            promise.then(function (items) {
+                narrow.found = items;
+                narrow.searched = narrow.found.length === 0;
+            }).catch(function (error) {
+                console.log("Something went terribly wrong.");
+            });
+        }
+    }
+
+    MenuSearchService.$inject = ['$http']
+
+    function MenuSearchService($http) {
+        var menu = this;
+        var items = [];
+
+        menu.getMatchedMenuItems = function (searchValue) {
+            return $http({
+                method: "GET",
+                url: "https://davids-restaurant.herokuapp.com/menu_items.json",
+                params: {}
+            }).then(function (result) {
+                items = getMatchedData(searchValue, result);
+                return items;
+            });
+        }
+
+        menu.removeItem = function (index) {
+            items.splice(index, 1);
+        }
+
+        function getMatchedData(searchValue, result) {
+            var returnItems = [];
+            if (!searchValue) {
+                return returnItems;
+            }
+            var items = result.data.menu_items;
+
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].description.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1) {
+                    returnItems.push(items[i]);
+                }
+            }
+
+            return returnItems;
+        }
+    }
+</script>
