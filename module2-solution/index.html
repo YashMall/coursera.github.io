@@ -1,42 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="checkOffApp">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Shopping List App</title>
-        <link rel="stylesheet" href="./style.css">
-        <script src="./angular.js"></script>
-        <script src="./app.js"></script>
-    </head>
-    <body>
-        <header>
-            <h1>Check Off Shopping List</h1>
-        </header>
-        <section class="section-1">
-            <div class="to-buy list" ng-controller="toBuyController as toBuy">
-                <label><b>to buy</b></label>
-                <ul class="items-list">
-                    <li ng-repeat="item in toBuy.items">
-                        <div>Buy {{item.quantity}} {{item.name}}</div>
-                        <button class="button" ng-click="toBuy.moveItem($index)">Bought</button>
-                    </li>
-                </ul>
-                <div class="message" ng-if="!toBuy.items.length">
-                    every think is bought
-                </div>
-            </div>
-            <div class="already-bought list" ng-controller="alreadyBoughtController as alreadyBought">
-                <label><b>already bought</b></label>
-                <ul class="items-list">
-                    <li ng-repeat="item in alreadyBought.items">
-                        <div>Bought {{item.quantity}} {{item.name}}</div>
-                    </li>
-                </ul>
-                <div class="message" ng-hide="alreadyBought.items.length">
-                    no thing bought yet
-                </div>
-            </div>
-        </section>
-    </body>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="angular.min.js"></script>
+    <script src="app.js"></script>
+
+    <title>Lunch Check App</title>
+  </head>
+  <body ng-app="LunchCheck">
+    <p>Please enter your lunch using comma: </p>
+
+    <div id="target" ng-controller="LunchCheckController">
+      <input type = "text "  ng-model = "lunch"></input>
+      <br>
+      (Example : item1,item2,item3 also empty and space item is not valid as item )
+      <br><br>
+      <button type="button" ng-click="checkLunch()"><p>Check If Too Much</p></button>
+
+      <p ng-style = "color" >{{message}}<p>
+    </div>
+
+  </body>
 </html>
