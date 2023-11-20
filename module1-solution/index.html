@@ -1,84 +1,30 @@
 <!DOCTYPE html>
-<html ng-app="LunchCheck">
-
-<head>
-  <meta charset="utf-8">
-  <script src="angular.min.js"></script>
-  <title>Lunch Check App</title>
-</head>
-
-<body>
-
-  <div ng-controller="LunchCheckController">
-    <p>Please enter your lunch using comma: </p>
-
-    <input type="text" ng-model="lunch">
-    <br>
-    (Example: item1, item2, item3 also empty and space item is not valid as item)
-    <br><br>
-    <button type="button" ng-click="checkLunch">
-      <p>Check If Too Much</p>
-    </button>
-
-    <p ng-style="color">{{message}}</p>
-  </div>
-
-  <script src="angular.min.js"></script>
-  <script>
-    (function () {
-
-      'use strict';
-
-      angular.module('LunchCheck', [])
-
-        .controller('LunchCheckController', LunchCheckController);
-
-      LunchCheckController.$inject = ['$scope'];
-
-      function LunchCheckController($scope) {
-
-        $scope.lunch = '';
-        $scope.message = '';
-        $scope.color = '';
-        $scope.checkLunch = function () {
-          var foodNum = calcFoodNumber($scope.lunch);
-          if ($scope.lunch == '') {
-            $scope.message = "Please enter data first";
-            $scope.color = { "color": "red" };
-          } else if (foodNum > 3) {
-            $scope.message = "Too much!";
-            $scope.color = { "color": "green" };
-          } else if (foodNum <= 3) {
-            $scope.message = "Enjoy!";
-            $scope.color = { "color": "green" };
-          }
-        }
-
-        function calcFoodNumber(foods) {
-          var numOfFood = 0;
-          var foodElem = [];
-          foodElem = foods.split(',');
-          for (var i = 0; i < foodElem.length; i++) {
-            if (checkEmpty(foodElem[i])) {
-              numOfFood++;
-            }
-          }
-
-          return numOfFood;
-        }
-
-        function checkEmpty(string) {
-          for (var i = 0; i < string.length; i++)
-            if (string[i] && string[i] != " ")
-              return true;
-          return false;
-        }
-
-      }
-
-    })();
-  </script>
-
-</body>
-
+<html lang="en" ng-app="firstApp">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Check 2 Much App</title>
+        <link rel="stylesheet" href="./style.css">
+        <script src="./angular.js"></script>
+        <script src="./app.js"></script>
+    </head>
+    <body ng-controller="firstAppController">
+        <div class="container">
+            <label>
+                Enter Items That You Are Usually Eat For Lunch
+                <b>(Please use Comma-Separated)</b>
+                <br>
+                <b>NOTE:- </b>
+                Empty item does not consider
+            </label>
+            <input type="text" class="items" ng-model="items">
+            <button ng-click="check();">Check If Too Much</button>
+            <label>{{message}}</label>
+            <div>
+                <div class="circle green {{green_opacity}}"></div>
+                <div class="circle red {{red_opacity}}"></div>
+            </div>
+        </div>
+    </body>
 </html>
